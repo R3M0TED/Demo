@@ -1,19 +1,22 @@
 import { BrowserContext } from 'playwright';
 import TestParticipant from './test-participant';
 import MainPage from '../page-object-models/main-page';
-import ScreenshotUtilities from './screenshot-utilities';
+import ScreenshotUtilities from './utilities/screenshot-utilities';
+import TestParticipantFactory from './factories/test-participant-factory';
 
 class TestStateProvider {
   private browserContext: BrowserContext;
   private participants: TestParticipant[] = [];
+  private testName?: string;
 
-  constructor(context: BrowserContext) {
+  constructor(context: BrowserContext, testName?: string) {
     this.browserContext = context;
+    this.testName = testName;
   }
 
-  public async createTestParticipant(navigate: boolean = true): Promise<MainPage> {
+  public async createTestParticipant(): Promise<MainPage> {
     const page = await this.browserContext.newPage();
-    const participant = new TestParticipant(page);
+    const participant = TestParticipantFactory.createTestParticipant(page);
     this.participants.push(participant);
 
     await this.goToUrl(participant);
@@ -29,12 +32,12 @@ class TestStateProvider {
   }
 
   public async screenshotPages() {
-    if (this.participants.length === 0) {
+    if (!this.testName){
+      console.error("Aborting failure screenshots. No test name was found.");
       return;
     }
-
-    const testName = expect.getState().currentTestName ?? 'Null';
-    await ScreenshotUtilities.takeFailureScreenshots(this.participants, testName);
+    
+    await ScreenshotUtilities.takeFailureScreenshots(this.participants, this.testName);
   }
 
   private async goToUrl(participant: TestParticipant) {

@@ -1,18 +1,18 @@
-import { runTest } from '../runtime/run-test';
+import SetupFixture from '../runtime/setup-fixture';
 
 describe('MultipleUsersDemoTests', () => {
   it('WhenTwoUsersDoSomethingThenThisHappens', async () => {
-    await runTest(async (sp) => {
-      let subjectMainPage = await sp.createTestParticipant();
-      let witnessMainPage = await sp.createTestParticipant();
+    await SetupFixture.runTest(async (sp) => {
+      const subjectMainPage = await sp.createTestParticipant();
+      const witnessMainPage = await sp.createTestParticipant();
 
-      let subjectIndustriesPopover = await subjectMainPage.navigationBarPage.hoverIndustries();
-      let witnessIndustriesPopover = await witnessMainPage.navigationBarPage.hoverIndustries();
+      const subjectIndustriesPopover = await subjectMainPage.navigationBarPage.hoverIndustries();
+      const witnessIndustriesPopover = await witnessMainPage.navigationBarPage.hoverIndustries();
 
-      let subjectSolutionsPage = await subjectIndustriesPopover.clickArt();
-      let witnessSolutionsPage = await witnessIndustriesPopover.clickArt();
+      const subjectSolutionsPage = await subjectIndustriesPopover.clickArt();
+      const witnessSolutionsPage = await witnessIndustriesPopover.clickArt();
       
-      await expect(subjectSolutionsPage.waitForTitle()).toThrow();
+      await expect(subjectSolutionsPage.waitForTitle()).resolves.not.toThrow();
       await expect(witnessSolutionsPage.waitForTitle()).resolves.not.toThrow();
     });
   });

@@ -5,6 +5,8 @@ const config: Config.InitialOptions = {
   testEnvironment: 'node',
   testTimeout: 60000, 
   maxWorkers: '50%',
+  globalSetup: './runtime/global-setup.ts',
+  globalTeardown: './runtime/global-teardown.ts',
 };
 
 export default config;

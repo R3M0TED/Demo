@@ -1,23 +1,22 @@
-import { runTest } from '../runtime/run-test';
+import SetupFixture from '../runtime/setup-fixture';
 
 describe('IndustriesNavigationBarTests', () => {
   it('ClickingArtDirectsUserToCorrectPage ', async () => {
-    await runTest(async (sp) => {
-      let subjectMainPage = await sp.createTestParticipant();
-      let subjectIndustriesPopover = await subjectMainPage.navigationBarPage.hoverIndustries();
-      let subjectSolutionsPage = await subjectIndustriesPopover.clickArt();
-      
-      await expect(subjectSolutionsPage.waitForTitle()).toThrow();
+    await SetupFixture.runTest(async (sp) => {
+      const subjectMainPage = await sp.createTestParticipant();
+      const subjectIndustriesPopover = await subjectMainPage.navigationBarPage.hoverIndustries();
+      const subjectSolutionsPage = await subjectIndustriesPopover.clickArt();
+      await expect(subjectSolutionsPage.waitForTitle()).resolves.not.toThrow();
     });
   });
 
   it('ClickingAutomotiveDirectsUserToCorrectPage ', async () => {
-    await runTest(async (sp) => {
-      let subjectMainPage = await sp.createTestParticipant();
-      let subjectIndustriesPopover = await subjectMainPage.navigationBarPage.hoverIndustries();
-      let subjectSolutionsPage = await subjectIndustriesPopover.clickAutomotive();
+    await SetupFixture.runTest(async (sp) => {
+      const subjectMainPage = await sp.createTestParticipant();
+      const subjectIndustriesPopover = await subjectMainPage.navigationBarPage.hoverIndustries();
+      const subjectSolutionsPage = await subjectIndustriesPopover.clickAutomotive();
       
-      await expect(subjectSolutionsPage.waitForTitle()).toThrow();
+      await expect(subjectSolutionsPage.waitForTitle()).resolves.not.toThrow();
     });
   });
 });
